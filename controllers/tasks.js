@@ -1,11 +1,11 @@
 const mongodb = require('../db/database');
 // const ObjectId = require('mongodb').ObjectId;
 
-const getAllUsers = async (req, res) => {
+const getAllTasks = async (req, res) => {
   const result = await mongodb
     .getDatabase()
     .db()
-    .collection('users')
+    .collection('tasks')
     .find()
     .toArray();
   if (result.error) {
@@ -17,5 +17,5 @@ const getAllUsers = async (req, res) => {
 };
 
 module.exports = {
-  getAllUsers
+  getAllTasks
 };

@@ -30,3 +30,36 @@ Content-Type: application/json
 
 ### Delete a user by ID
 DELETE http://localhost:3001/users/{id}
+
+### Get all tasks in DB
+GET http://localhost:3001/tasks
+
+### Get a task by ID
+GET http://localhost:3001/tasks/{id}
+
+### Create a new task
+POST http://localhost:3001/tasks
+Content-Type: application/json
+
+{
+  "title": "New Task",
+  "description": "Task description",
+  "status": "pending",
+  "dueDate": "2023-12-31",
+  "priority": "medium"
+}
+
+### Update a task by ID
+PUT http://localhost:3001/tasks/{id}
+Content-Type: application/json
+
+{
+  "title": "Updated Task",
+  "description": "Updated description",
+  "status": "in-progress",
+  "dueDate": "2024-01-31",
+  "priority": "high"
+}
+
+### Delete a task by ID
+DELETE http://localhost:3001/tasks/{id}

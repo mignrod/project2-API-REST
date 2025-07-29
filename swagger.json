@@ -5,7 +5,7 @@
     "description": "Tasks Manager API by Mignrod",
     "version": "1.0.0"
   },
-  "host": "project2-api-rest.onrender.com/",
+  "host": "project2-api-rest.onrender.com",
   "basePath": "/",
   "schemes": ["https"],
   "paths": {

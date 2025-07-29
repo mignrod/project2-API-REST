@@ -5,14 +5,14 @@
     "description": "Tasks Manager API by Mignrod",
     "version": "1.0.0"
   },
-  "host": "project2-api-rest.onrender.com",
+  "host": "project2-api-rest.onrender.com/",
   "basePath": "/",
   "schemes": ["https"],
   "paths": {
     "/users/": {
       "get": {
         "tags": ["Users"],
-        "description": "",
+        "description": "GETTING ALL USERS FROM THE DATABASE",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -25,7 +25,7 @@
       },
       "post": {
         "tags": ["Users"],
-        "description": "",
+        "description": "CREATING A NEW USER",
         "parameters": [
           {
             "name": "body",
@@ -65,7 +65,7 @@
     "/users/{id}": {
       "get": {
         "tags": ["Users"],
-        "description": "",
+        "description": "GETTING USER BY ID",
         "produces": ["application/json"],
         "parameters": [
           {
@@ -89,7 +89,7 @@
       },
       "put": {
         "tags": ["Users"],
-        "description": "",
+        "description": "UPDATING USER BY ID",
         "produces": ["application/json"],
         "parameters": [
           {
@@ -134,7 +134,152 @@
       },
       "delete": {
         "tags": ["Users"],
-        "description": "",
+        "description": "DELETING AN USER BY ID",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/tasks/": {
+      "get": {
+        "tags": ["Tasks"],
+        "description": "GETTING ALL TASKS FROM THE DATABASE",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tasks"],
+        "description": "CREATING A NEW TASK",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "'pending', 'in-progress', 'completed'"
+                },
+                "dueDate": {
+                  "example": "2023-12-31"
+                },
+                "priority": {
+                  "example": "'low', 'medium', 'high'"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/tasks/{id}": {
+      "get": {
+        "tags": ["Tasks"],
+        "description": "GETTING TASK BY ID",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Tasks"],
+        "description": "UPDATING TASK BY ID",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "'pending', 'in-progress', 'completed'"
+                },
+                "dueDate": {
+                  "example": "2023-12-31"
+                },
+                "priority": {
+                  "example": "'low', 'medium', 'high'"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tasks"],
+        "description": "DELETING TASK BY ID",
         "produces": ["application/json"],
         "parameters": [
           {

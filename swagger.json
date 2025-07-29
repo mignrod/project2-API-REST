@@ -5,7 +5,7 @@
     "description": "Tasks Manager API by Mignrod",
     "version": "1.0.0"
   },
-  "host": "https://project2-api-rest.onrender.com",
+  "host": "project2-api-rest.onrender.com",
   "basePath": "/",
   "schemes": ["https"],
   "paths": {
@@ -26,6 +26,32 @@
       "post": {
         "tags": ["Users"],
         "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "nickname": {
+                  "example": "any"
+                },
+                "age": {
+                  "example": 0
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "Created"
@@ -71,6 +97,30 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "nickname": {
+                  "example": "any"
+                },
+                "age": {
+                  "example": 0
+                }
+              }
+            }
           }
         ],
         "responses": {

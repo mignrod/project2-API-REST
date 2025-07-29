@@ -5,8 +5,8 @@ const doc = {
     title: 'Tasks Manager API',
     description: 'Tasks Manager API by Mignrod'
   },
-  host: 'localhost:3001',
-  schemes: ['http', 'https']
+  host: 'project2-api-rest.onrender.com/',
+  schemes: ['https']
 };
 
 const outputfile = './swagger.json';

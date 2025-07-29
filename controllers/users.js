@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const userSchema = require('../models/user');
 
 const getAllUsers = async (req, res) => {
+  // #swagger.tags = ['Users']
   const result = await mongodb
     .getDatabase()
     .db()
@@ -19,6 +20,7 @@ const getAllUsers = async (req, res) => {
 };
 
 const getUserById = async (req, res) => {
+  // #swagger.tags = ['Users']
   const userId = req.params.id;
   if (!ObjectId.isValid(userId)) {
     return res.status(400).json({ message: 'Invalid user ID' });
@@ -36,6 +38,7 @@ const getUserById = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
+  // #swagger.tags = ['Users']
   try {
     if (mongoose.connection.readyState !== 1) {
       return res.status(500).json({ message: 'Database not connected' });
@@ -48,6 +51,7 @@ const createUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
+  // #swagger.tags = ['Users']
   const userId = req.params.id;
   const updatedData = req.body;
   const result = await mongodb
@@ -64,6 +68,7 @@ const updateUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
+  // #swagger.tags = ['Users']
   const userId = req.params.id;
   if (!ObjectId.isValid(userId)) {
     return res.status(400).json({ message: 'Invalid user ID' });

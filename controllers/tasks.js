@@ -38,7 +38,7 @@ const getAllTasks = async (req, res) => {
 const getTaskById = async (req, res) => {
   // #swagger.tags = ['Tasks']
   try {
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findById(req.params.taskId);
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }

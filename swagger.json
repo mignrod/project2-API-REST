@@ -154,7 +154,7 @@
         }
       }
     },
-    "/users/userId/tasks/": {
+    "/users/{userId}/tasks/": {
       "get": {
         "tags": ["Tasks"],
         "description": "GETTING ALL TASKS FROM THE USER ID",
@@ -222,7 +222,7 @@
         }
       }
     },
-    "users/userId/tasks/{id}": {
+    "users/{userId}/tasks/{id}": {
       "get": {
         "tags": ["Tasks"],
         "description": "GETTING TASK BY ID",

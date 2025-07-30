@@ -157,8 +157,16 @@
     "/tasks/": {
       "get": {
         "tags": ["Tasks"],
-        "description": "GETTING ALL TASKS FROM THE DATABASE",
+        "description": "GETTING ALL TASKS FROM THE USER ID",
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"

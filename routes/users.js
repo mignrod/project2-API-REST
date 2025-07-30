@@ -12,5 +12,9 @@ router.put('/:id', usersController.updateUser);
 router.delete('/:id', usersController.deleteUser);
 
 router.post('/:id/tasks', tasksController.createTask);
+router.get('/:id/tasks', tasksController.getAllTasks);
+router.get('/:id/tasks/:taskId', tasksController.getTaskById);
+router.put('/:id/tasks/:taskId', tasksController.updateTask);
+router.delete('/:id/tasks/:taskId', tasksController.deleteTask);
 
 module.exports = router;

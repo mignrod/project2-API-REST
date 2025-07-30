@@ -259,7 +259,7 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "id",
+            "name": "taskId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -304,7 +304,7 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "id",
+            "name": "taskId",
             "in": "path",
             "required": true,
             "type": "string"

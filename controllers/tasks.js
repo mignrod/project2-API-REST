@@ -3,8 +3,7 @@ const Task = require('../models/task');
 const createTask = async (req, res) => {
   // #swagger.tags = ['Tasks']
   try {
-    const { title, description, status, dueDate, priority, createdBy, userId } =
-      req.body;
+    const { title, description, status, dueDate, priority } = req.body;
     if (!title || !description) {
       return res
         .status(400)
@@ -15,14 +14,19 @@ const createTask = async (req, res) => {
       req.params.id && mongoose.Types.ObjectId.isValid(req.params.id)
         ? req.params.id
         : undefined;
+    if (!idFromParams) {
+      return res
+        .status(400)
+        .json({ message: 'User ID is required in params and must be valid.' });
+    }
     const newTask = new Task({
       title,
       description,
       status: status || 'pending',
       dueDate,
       priority: priority || 'medium',
-      createdBy: idFromParams || createdBy,
-      userId: idFromParams || userId
+      createdBy: idFromParams,
+      userId: idFromParams
     });
     await newTask.save();
     res.status(201).json(newTask);

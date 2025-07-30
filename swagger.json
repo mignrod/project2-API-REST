@@ -259,6 +259,12 @@
         "produces": ["application/json"],
         "parameters": [
           {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "taskId",
             "in": "path",
             "required": true,
@@ -303,6 +309,12 @@
         "description": "DELETING TASK BY ID",
         "produces": ["application/json"],
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "taskId",
             "in": "path",

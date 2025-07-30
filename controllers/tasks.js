@@ -53,7 +53,7 @@ const updateTask = async (req, res) => {
   try {
     const { title, description, status, dueDate, priority } = req.body;
     const task = await Task.findByIdAndUpdate(
-      req.params.id,
+      req.params.taskId,
       {
         title,
         description,
@@ -75,7 +75,7 @@ const updateTask = async (req, res) => {
 const deleteTask = async (req, res) => {
   // #swagger.tags = ['Tasks']
   try {
-    const task = await Task.findByIdAndDelete(req.params.id);
+    const task = await Task.findByIdAndDelete(req.params.taskId);
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }

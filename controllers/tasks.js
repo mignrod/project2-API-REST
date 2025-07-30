@@ -10,14 +10,19 @@ const createTask = async (req, res) => {
         .status(400)
         .json({ message: 'Title and description are required' });
     }
+    const mongoose = require('mongoose');
+    const idFromParams =
+      req.params.id && mongoose.Types.ObjectId.isValid(req.params.id)
+        ? req.params.id
+        : undefined;
     const newTask = new Task({
       title,
       description,
       status: status || 'pending',
       dueDate,
       priority: priority || 'medium',
-      createdBy: createdBy || req.params.id,
-      userId: userId || req.params.id
+      createdBy: createdBy || idFromParams,
+      userId: userId || idFromParams
     });
     await newTask.save();
     res.status(201).json(newTask);
@@ -57,12 +62,10 @@ const updateTask = async (req, res) => {
     // Validar el status según el enum del schema
     const allowedStatus = ['pending', 'in-progress', 'completed'];
     if (status && !allowedStatus.includes(status)) {
-      return res
-        .status(400)
-        .json({
-          message:
-            'Invalid status value. Allowed values are: pending, in-progress, completed.'
-        });
+      return res.status(400).json({
+        message:
+          'Invalid status value. Allowed values are: pending, in-progress, completed.'
+      });
     }
 
     const task = await Task.findByIdAndUpdate(

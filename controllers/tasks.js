@@ -3,7 +3,8 @@ const Task = require('../models/task');
 const createTask = async (req, res) => {
   // #swagger.tags = ['Tasks']
   try {
-    const { title, description, status, dueDate, priority } = req.body;
+    const { title, description, status, dueDate, priority, createdBy, userId } =
+      req.body;
     if (!title || !description) {
       return res
         .status(400)
@@ -15,8 +16,8 @@ const createTask = async (req, res) => {
       status: status || 'pending',
       dueDate,
       priority: priority || 'medium',
-      createdBy: req.params.id,
-      userId: req.params.id
+      createdBy: createdBy || req.params.id,
+      userId: userId || req.params.id
     });
     await newTask.save();
     res.status(201).json(newTask);
@@ -52,6 +53,18 @@ const updateTask = async (req, res) => {
   // #swagger.tags = ['Tasks']
   try {
     const { title, description, status, dueDate, priority } = req.body;
+
+    // Validar el status según el enum del schema
+    const allowedStatus = ['pending', 'in-progress', 'completed'];
+    if (status && !allowedStatus.includes(status)) {
+      return res
+        .status(400)
+        .json({
+          message:
+            'Invalid status value. Allowed values are: pending, in-progress, completed.'
+        });
+    }
+
     const task = await Task.findByIdAndUpdate(
       req.params.taskId,
       {
@@ -61,7 +74,7 @@ const updateTask = async (req, res) => {
         dueDate,
         priority
       },
-      { new: true }
+      { new: true, runValidators: true }
     );
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });

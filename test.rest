@@ -74,3 +74,27 @@ DELETE http://localhost:3001/tasks/{id}
 
 ### Get All tasks by USER ID
 GET https://project2-api-rest.onrender.com/users/68884edb4a1f21a4eb545411/tasks
+
+### Creating a new task by USER ID
+POST https://project2-api-rest.onrender.com/users/68884edb4a1f21a4eb545411/tasks
+Content-Type: application/json
+
+{
+  "title": "New Task1",
+  "description": "Task description",
+  "status": "pending",
+  "dueDate": "2023-12-31",
+  "priority": "medium"
+}
+
+### Updating a task by USER ID
+PUT https://project2-api-rest.onrender.com/users/68884edb4a1f21a4eb545411/tasks/688a78d9d817526e1e42ae6d
+Content-Type: application/json
+
+{
+  "title": "Updated Task",
+  "description": "Updated description",
+  "status": "completedaaaaadoooo",
+  "dueDate": "2024-01-31",
+  "priority": "high"
+}

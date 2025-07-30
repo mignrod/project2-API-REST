@@ -170,8 +170,15 @@
       },
       "post": {
         "tags": ["Tasks"],
-        "description": "CREATING A NEW TASK",
+        "description": "CREATING A NEW TASK (ASSOCIATED TO USER ID)",
         "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "User ID to associate the task with",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",

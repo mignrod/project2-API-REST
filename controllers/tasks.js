@@ -21,8 +21,8 @@ const createTask = async (req, res) => {
       status: status || 'pending',
       dueDate,
       priority: priority || 'medium',
-      createdBy: createdBy || idFromParams,
-      userId: userId || idFromParams
+      createdBy: idFromParams || createdBy,
+      userId: idFromParams || userId
     });
     await newTask.save();
     res.status(201).json(newTask);

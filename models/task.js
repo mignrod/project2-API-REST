@@ -16,8 +16,8 @@ const taskSchema = new Schema(
       enum: ['low', 'medium', 'high'],
       default: 'medium'
     },
-    createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
-    userId: { type: Schema.Types.ObjectId, ref: 'User' }
+    createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }
   },
   {
     timestamps: true

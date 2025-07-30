@@ -1,5 +1,5 @@
 const express = require('express');
-const mongodb = require('./db/database');
+const connectDB = require('./db/database');
 const bodyParser = require('body-parser');
 
 const port = process.env.PORT || 3001;
@@ -19,6 +19,8 @@ app.use((req, res, next) => {
   next();
 });
 
+connectDB();
+
 app.use('/', require('./routes'));
 
 process.on('uncaughtException', (err, origin) => {
@@ -28,12 +30,6 @@ process.on('uncaughtException', (err, origin) => {
   );
 });
 
-mongodb.initDb((err) => {
-  if (err) {
-    console.log(err);
-  } else {
-    app.listen(port, () => {
-      console.log(`Database is listening and node Runnign on port ${port}`);
-    });
-  }
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });

@@ -1,16 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGODB_URL)
-  .then(() => {
-    console.log('MongoDB connected successfully');
-  })
-  .catch((err) => {
-    console.error('MongoDB connection error:', err);
-  });
-
 const taskSchema = new Schema(
   {
     title: { type: String, required: true },

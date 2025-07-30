@@ -17,13 +17,13 @@ Content-Type: application/json
 }
 
 ### Update a user by ID
-PUT http://localhost:3001/users/{id}
+PUT http://localhost:3001/users/68884edb4a1f21a4eb545411
 Content-Type: application/json
 
 {
   "name": "John Doe",
   "email": "john.doe@example.com",
-  "password": "password123",
+  "password": "password123456",
   "nickname": "Johnny",
   "age": 31
 }
@@ -37,8 +37,11 @@ GET http://localhost:3001/tasks
 ### Get a task by ID
 GET http://localhost:3001/tasks/{id}
 
+
+
+//=======================TASKS SECTION=======================//
 ### Create a new task
-POST http://localhost:3001/tasks
+POST http://localhost:3001/users/68884edb4a1f21a4eb545411/tasks
 Content-Type: application/json
 
 {

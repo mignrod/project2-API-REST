@@ -1,50 +1,45 @@
-const mongodb = require('../db/database');
-const ObjectId = require('mongodb').ObjectId;
-const mongoose = require('mongoose');
-const userSchema = require('../models/user');
+const User = require('../models/user');
 
 const getAllUsers = async (req, res) => {
   // #swagger.tags = ['Users']
-  const result = await mongodb
-    .getDatabase()
-    .db()
-    .collection('users')
-    .find()
-    .toArray();
-  if (result.error) {
-    res.status(400).json({ message: result.error });
-  } else {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).json(result);
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 const getUserById = async (req, res) => {
   // #swagger.tags = ['Users']
-  const userId = req.params.id;
-  if (!ObjectId.isValid(userId)) {
-    return res.status(400).json({ message: 'Invalid user ID' });
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-  const result = await mongodb
-    .getDatabase()
-    .db()
-    .collection('users')
-    .findOne({ _id: new ObjectId(userId) });
-  if (!result) {
-    return res.status(404).json({ message: 'User not found' });
-  }
-  res.setHeader('Content-Type', 'application/json');
-  res.status(200).json(result);
 };
 
 const createUser = async (req, res) => {
   // #swagger.tags = ['Users']
   try {
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(500).json({ message: 'Database not connected' });
+    const { name, email, password, nickname, age } = req.body;
+    if (!name || !email || !password || !nickname) {
+      return res.status(400).json({ message: 'All fields are required' });
     }
-    const user = await userSchema.create(req.body);
-    res.status(201).json(user);
+    const newUser = new User({
+      name,
+      email,
+      password,
+      nickname,
+      age
+    });
+    await newUser.save();
+    res.status(201).json(newUser);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -52,37 +47,40 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   // #swagger.tags = ['Users']
-  const userId = req.params.id;
-  const updatedData = req.body;
-  const result = await mongodb
-    .getDatabase()
-    .db()
-    .collection('users')
-    .updateOne({ _id: new ObjectId(userId) }, { $set: updatedData });
-  if (result.error) {
-    res.status(400).json({ message: result.error });
-  } else {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({ message: 'User updated successfully' });
+  try {
+    const { id } = req.params;
+    const { name, email, password, nickname, age } = req.body;
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        name,
+        email,
+        password,
+        nickname,
+        age
+      },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 const deleteUser = async (req, res) => {
   // #swagger.tags = ['Users']
-  const userId = req.params.id;
-  if (!ObjectId.isValid(userId)) {
-    return res.status(400).json({ message: 'Invalid user ID' });
-  }
-  const result = await mongodb
-    .getDatabase()
-    .db()
-    .collection('users')
-    .deleteOne({ _id: new ObjectId(userId) });
-  if (result.error) {
-    res.status(400).json({ message: result.error });
-  } else {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({ message: 'User deleted successfully' });
+  try {
+    const { id } = req.params;
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 

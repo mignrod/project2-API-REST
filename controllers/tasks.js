@@ -1,50 +1,48 @@
-const mongodb = require('../db/database');
-const ObjectId = require('mongodb').ObjectId;
-const mongoose = require('mongoose');
-const taskSchema = require('../models/task');
+const Task = require('../models/task');
+
+const createTask = async (req, res) => {
+  // #swagger.tags = ['Tasks']
+  try {
+    const { title, description, status, dueDate, priority } = req.body;
+    if (!title || !description) {
+      return res
+        .status(400)
+        .json({ message: 'Title and description are required' });
+    }
+    const newTask = new Task({
+      title,
+      description,
+      status: status || 'pending',
+      dueDate,
+      priority: priority || 'medium',
+      createdBy: req.params.id,
+      userId: req.params.id
+    });
+    await newTask.save();
+    res.status(201).json(newTask);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 const getAllTasks = async (req, res) => {
   // #swagger.tags = ['Tasks']
-  const result = await mongodb
-    .getDatabase()
-    .db()
-    .collection('tasks')
-    .find()
-    .toArray();
-  if (result.error) {
-    res.status(400).json({ message: result.error });
-  } else {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).json(result);
+  try {
+    const tasks = await Task.find({ userId: req.params.id });
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 const getTaskById = async (req, res) => {
   // #swagger.tags = ['Tasks']
-  const taskId = req.params.id;
-  if (!ObjectId.isValid(taskId)) {
-    return res.status(400).json({ message: 'Invalid task ID' });
-  }
-  const result = await mongodb
-    .getDatabase()
-    .db()
-    .collection('tasks')
-    .findOne({ _id: new ObjectId(taskId) });
-  if (!result) {
-    return res.status(404).json({ message: 'Task not found' });
-  }
-  res.setHeader('Content-Type', 'application/json');
-  res.status(200).json(result);
-};
-
-const createTask = async (req, res) => {
-  // #swagger.tags = ['Tasks']
   try {
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(500).json({ message: 'Database not connected' });
+    const task = await Task.findById(req.params.id);
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
     }
-    const task = await taskSchema.create(req.body);
-    res.status(201).json(task);
+    res.status(200).json(task);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -52,44 +50,45 @@ const createTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
   // #swagger.tags = ['Tasks']
-  const taskId = req.params.id;
-  const updatedData = req.body;
-  const result = await mongodb
-    .getDatabase()
-    .db()
-    .collection('tasks')
-    .updateOne({ _id: new ObjectId(taskId) }, { $set: updatedData });
-  if (result.error) {
-    res.status(400).json({ message: result.error });
-  } else {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({ message: 'Task updated successfully' });
+  try {
+    const { title, description, status, dueDate, priority } = req.body;
+    const task = await Task.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        description,
+        status,
+        dueDate,
+        priority
+      },
+      { new: true }
+    );
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 const deleteTask = async (req, res) => {
   // #swagger.tags = ['Tasks']
-  const taskId = req.params.id;
-  if (!ObjectId.isValid(taskId)) {
-    return res.status(400).json({ message: 'Invalid task ID' });
-  }
-  const result = await mongodb
-    .getDatabase()
-    .db()
-    .collection('tasks')
-    .deleteOne({ _id: new ObjectId(taskId) });
-  if (result.error) {
-    res.status(400).json({ message: result.error });
-  } else {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({ message: 'Task deleted successfully' });
+  try {
+    const task = await Task.findByIdAndDelete(req.params.id);
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 module.exports = {
+  createTask,
   getAllTasks,
   getTaskById,
-  createTask,
   updateTask,
   deleteTask
 };

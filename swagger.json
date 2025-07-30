@@ -222,7 +222,7 @@
         }
       }
     },
-    "users/{id}/tasks/{taskId}": {
+    "/users/{id}/tasks/{taskId}": {
       "get": {
         "tags": ["Tasks"],
         "description": "GETTING TASK BY ID",

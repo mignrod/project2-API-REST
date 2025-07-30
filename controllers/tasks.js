@@ -10,11 +10,11 @@ const createTask = async (req, res) => {
         .json({ message: 'Title and description are required' });
     }
     const mongoose = require('mongoose');
-    const idFromParams =
+    const userId =
       req.params.id && mongoose.Types.ObjectId.isValid(req.params.id)
         ? req.params.id
         : undefined;
-    if (!idFromParams) {
+    if (!userId) {
       return res
         .status(400)
         .json({ message: 'User ID is required in params and must be valid.' });
@@ -25,8 +25,8 @@ const createTask = async (req, res) => {
       status: status || 'pending',
       dueDate,
       priority: priority || 'medium',
-      createdBy: idFromParams,
-      userId: idFromParams
+      createdBy: userId,
+      userId: userId
     });
     await newTask.save();
     res.status(201).json(newTask);

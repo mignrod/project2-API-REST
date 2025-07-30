@@ -94,7 +94,7 @@ Content-Type: application/json
 {
   "title": "Updated Task",
   "description": "Updated description",
-  "status": "completedaaaaadoooo",
+  "status": "pending",
   "dueDate": "2024-01-31",
   "priority": "high"
 }

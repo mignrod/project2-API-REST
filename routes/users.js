@@ -11,10 +11,10 @@ router.post('/', usersController.createUser);
 router.put('/:id', usersController.updateUser);
 router.delete('/:id', usersController.deleteUser);
 
-router.post('/:id/tasks', tasksController.createTask);
-router.get('/:id/tasks', tasksController.getAllTasks);
-router.get('/:id/tasks/:taskId', tasksController.getTaskById);
-router.put('/:id/tasks/:taskId', tasksController.updateTask);
-router.delete('/:id/tasks/:taskId', tasksController.deleteTask);
+router.post('/users/:id/tasks', tasksController.createTask);
+router.get('/users/:id/tasks', tasksController.getAllTasks);
+router.get('/users/:id/tasks/:taskId', tasksController.getTaskById);
+router.put('/users/:id/tasks/:taskId', tasksController.updateTask);
+router.delete('/users/:id/tasks/:taskId', tasksController.deleteTask);
 
 module.exports = router;

@@ -233,6 +233,12 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {

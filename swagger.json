@@ -5,7 +5,7 @@
     "description": "Tasks Manager API by Mignrod",
     "version": "1.0.0"
   },
-  "host": "project2-api-rest.onrender.com/",
+  "host": "project2-api-rest.onrender.com",
   "basePath": "/",
   "schemes": ["https"],
   "securityDefinitions": {
@@ -13,7 +13,7 @@
       "type": "oauth2",
       "authorizationUrl": "https://github.com/login/oauth/authorize",
       "tokenUrl": "https://github.com/login/oauth/access_token",
-      "flow": "accessCode",
+      "flow": "implicit",
       "scopes": {
         "read:user": "Read user info",
         "user:email": "Access to user email"
@@ -21,7 +21,7 @@
     }
   },
   "paths": {
-    "users/": {
+    "/users/": {
       "get": {
         "tags": ["Users"],
         "description": "",
@@ -76,7 +76,7 @@
         }
       }
     },
-    "users/{id}": {
+    "/users/{id}": {
       "get": {
         "tags": ["Users"],
         "description": "",
@@ -174,7 +174,7 @@
         }
       }
     },
-    "users/{id}/tasks": {
+    "/users/{id}/tasks": {
       "post": {
         "tags": ["Tasks"],
         "description": "",
@@ -243,7 +243,7 @@
         }
       }
     },
-    "users/{id}/tasks/{taskId}": {
+    "/users/{id}/tasks/{taskId}": {
       "get": {
         "tags": ["Tasks"],
         "description": "",

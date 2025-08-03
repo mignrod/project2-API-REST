@@ -61,11 +61,15 @@ app.use(
       oauth: {
         clientId: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        scopes: ['read:user', 'user:email'],
+        appName: 'Task Manager API',
+        scopes: 'read:user user:email',
+        useBasicAuthenticationWithAccessCodeGrant: false,
         usePkceWithAuthorizationCodeGrant: true,
         additionalQueryStringParams: {
-          response_type: 'token'
-        }
+          response_type: 'code'
+        },
+        oauth2RedirectUrl:
+          'https://project2-api-rest.onrender.com/api-docs/oauth2-redirect.html'
       },
       persistAuthorization: true
     }

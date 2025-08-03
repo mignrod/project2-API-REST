@@ -1,18 +1,18 @@
-const swaggerAutogen = require('swagger-autogen');
+const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
   info: {
     title: 'Tasks Manager API',
     description: 'Tasks Manager API by Mignrod'
   },
-  host: 'project2-api-rest.onrender.com/',
+  host: 'project2-api-rest.onrender.com',
   schemes: ['https'],
   securityDefinitions: {
     GitHubOAuth: {
       type: 'oauth2',
       authorizationUrl: 'https://github.com/login/oauth/authorize',
       tokenUrl: 'https://github.com/login/oauth/access_token',
-      flow: 'accessCode',
+      flow: 'implicit',
       scopes: {
         'read:user': 'Read user info',
         'user:email': 'Access to user email'
@@ -36,7 +36,8 @@ const swaggerOptions = {
     scopes: ['read:user', 'user:email'],
     usePkceWithAuthorizationCodeGrant: true,
     useBasicAuthenticationWithAccessCodeGrant: true,
-    callbackUrl: 'https://project2-api-rest.onrender.com/auth/github/callback'
+    redirectUrl:
+      'https://project2-api-rest.onrender.com/api-docs/oauth2-redirect.html'
   }
 };
 

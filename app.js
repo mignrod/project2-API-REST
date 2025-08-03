@@ -3,6 +3,7 @@ const connectDB = require('./db/database');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const GitHubStrategy = require('passport-github2').Strategy;
 const cors = require('cors');
 
@@ -33,7 +34,24 @@ app
     next();
   })
   .use(cors({ methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'] }))
-  .use(cors({ origin: '*' }));
+  .use(cors({ origin: '*' }))
+  .use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URL,
+        collectionName: 'sessions',
+        ttl: 14 * 24 * 60 * 60
+      }),
+      cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 14
+      }
+    })
+  );
 
 app.use('/', require('./routes'));
 

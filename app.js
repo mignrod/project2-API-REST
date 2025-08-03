@@ -35,8 +35,6 @@ app
   .use(cors({ methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'] }))
   .use(cors({ origin: '*' }));
 
-connectDB();
-
 app.use('/', require('./routes'));
 
 passport.use(
@@ -80,6 +78,8 @@ app.get(
     res.redirect('/');
   }
 );
+
+connectDB();
 
 process.on('uncaughtException', (err, origin) => {
   console.log(

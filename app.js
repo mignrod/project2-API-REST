@@ -59,12 +59,9 @@ app.use(
   swaggerUi.setup(swaggerDocument, {
     swaggerOptions: {
       initOAuth: {
-        clientId: process.env.GITHUB_CLIENT_ID,
         appName: 'Task Manager API'
       },
       oauth: {
-        clientId: process.env.GITHUB_CLIENT_ID,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET,
         appName: 'Task Manager API',
         scopes: 'read:user user:email',
         useBasicAuthenticationWithAccessCodeGrant: false,

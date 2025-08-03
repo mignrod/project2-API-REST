@@ -10,15 +10,25 @@ const cors = require('cors');
 const port = process.env.PORT || 3001;
 const app = express();
 
+const sessionMiddleware = session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URL,
+    collectionName: 'sessions',
+    ttl: 14 * 24 * 60 * 60
+  }),
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 14
+  }
+});
+
 app
   .use(bodyParser.json())
-  .use(
-    session({
-      secret: 'secret',
-      resave: 'false',
-      saveUninitialized: true
-    })
-  )
+  .use(sessionMiddleware)
   .use(passport.initialize())
   .use(passport.session())
   .use((req, res, next) => {
@@ -33,23 +43,11 @@ app
     );
     next();
   })
-  .use(cors({ methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'] }))
-  .use(cors({ origin: '*' }))
   .use(
-    session({
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-      saveUninitialized: false,
-      store: MongoStore.create({
-        mongoUrl: process.env.MONGODB_URL,
-        collectionName: 'sessions',
-        ttl: 14 * 24 * 60 * 60
-      }),
-      cookie: {
-        secure: process.env.NODE_ENV === 'production',
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 14
-      }
+    cors({
+      methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
+      origin: '*',
+      credentials: true
     })
   );
 

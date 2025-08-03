@@ -12,7 +12,7 @@ const doc = {
       type: 'oauth2',
       authorizationUrl: 'https://github.com/login/oauth/authorize',
       tokenUrl: 'https://github.com/login/oauth/access_token',
-      flow: 'implicit',
+      flow: 'accessCode',
       scopes: {
         'read:user': 'Read user info',
         'user:email': 'Access to user email'
@@ -35,7 +35,8 @@ const swaggerOptions = {
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
     scopes: ['read:user', 'user:email'],
     usePkceWithAuthorizationCodeGrant: true,
-    useBasicAuthenticationWithAccessCodeGrant: true,
+    useBasicAuthenticationWithAccessCodeGrant: false,
+    appName: 'Task Manager API',
     redirectUrl:
       'https://project2-api-rest.onrender.com/api-docs/oauth2-redirect.html'
   }

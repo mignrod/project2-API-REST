@@ -58,6 +58,10 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument, {
     swaggerOptions: {
+      initOAuth: {
+        clientId: process.env.GITHUB_CLIENT_ID,
+        appName: 'Task Manager API'
+      },
       oauth: {
         clientId: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
@@ -97,7 +101,7 @@ passport.serializeUser((user, done) => {
   done(null, user);
 });
 passport.deserializeUser((user, done) => {
-  done(null, done);
+  done(null, user);
 });
 
 app.get('/', (req, res) => {
@@ -111,12 +115,15 @@ app.get('/', (req, res) => {
 app.get(
   '/auth/github/callback',
   passport.authenticate('github', {
-    failureRedirect: '/api-docs',
+    failureRedirect: '/api-docs?authError=true',
     session: false
   }),
   (req, res) => {
     req.session.user = req.user;
-    res.redirect('/api-docs?authSuccess=true');
+    res.redirect(
+      '/api-docs?authSuccess=true&user=' +
+        encodeURIComponent(req.user.displayName)
+    );
   }
 );
 

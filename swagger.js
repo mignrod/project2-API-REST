@@ -34,6 +34,7 @@ const swaggerOptions = {
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
     scopes: ['read:user', 'user:email'],
+    usePkceWithAuthorizationCodeGrant: true,
     useBasicAuthenticationWithAccessCodeGrant: true,
     callbackUrl: 'https://project2-api-rest.onrender.com/auth/github/callback'
   }

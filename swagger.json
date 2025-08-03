@@ -7,45 +7,23 @@
   },
   "host": "project2-api-rest.onrender.com/",
   "basePath": "/",
-  "schemes": [
-    "https"
-  ],
+  "schemes": ["https"],
+  "securityDefinitions": {
+    "GitHubOAuth": {
+      "type": "oauth2",
+      "authorizationUrl": "https://github.com/login/oauth/authorize",
+      "tokenUrl": "https://github.com/login/oauth/access_token",
+      "flow": "accessCode",
+      "scopes": {
+        "read:user": "Read user info",
+        "user:email": "Access to user email"
+      }
+    }
+  },
   "paths": {
-    "/login": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/logout": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api-docs": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/users/": {
       "get": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "description": "",
         "responses": {
           "200": {
@@ -57,9 +35,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "description": "",
         "parameters": [
           {
@@ -102,9 +78,7 @@
     },
     "/users/{id}": {
       "get": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "description": "",
         "parameters": [
           {
@@ -127,9 +101,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "description": "",
         "parameters": [
           {
@@ -176,9 +148,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "description": "",
         "parameters": [
           {
@@ -206,9 +176,7 @@
     },
     "/users/{id}/tasks": {
       "post": {
-        "tags": [
-          "Tasks"
-        ],
+        "tags": ["Tasks"],
         "description": "",
         "parameters": [
           {
@@ -255,9 +223,7 @@
         }
       },
       "get": {
-        "tags": [
-          "Tasks"
-        ],
+        "tags": ["Tasks"],
         "description": "",
         "parameters": [
           {
@@ -279,9 +245,7 @@
     },
     "/users/{id}/tasks/{taskId}": {
       "get": {
-        "tags": [
-          "Tasks"
-        ],
+        "tags": ["Tasks"],
         "description": "",
         "parameters": [
           {
@@ -310,9 +274,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Tasks"
-        ],
+        "tags": ["Tasks"],
         "description": "",
         "parameters": [
           {
@@ -368,9 +330,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Tasks"
-        ],
+        "tags": ["Tasks"],
         "description": "",
         "parameters": [
           {
@@ -402,5 +362,10 @@
         }
       }
     }
-  }
+  },
+  "security": [
+    {
+      "GitHubOAuth": ["read:user", "user:email"]
+    }
+  ]
 }

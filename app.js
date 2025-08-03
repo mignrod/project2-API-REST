@@ -6,6 +6,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const GitHubStrategy = require('passport-github2').Strategy;
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 const port = process.env.PORT || 3001;
 const app = express();
@@ -51,6 +53,22 @@ app
     })
   );
 
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    swaggerOptions: {
+      oauth: {
+        clientId: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        scopes: ['read:user', 'user:email'],
+        usePkceWithAuthorizationCodeGrant: true
+      },
+      persistAuthorization: true // Para mantener la autorización entre recargas
+    }
+  })
+);
+
 app.use('/', require('./routes'));
 
 passport.use(
@@ -84,7 +102,7 @@ app.get('/', (req, res) => {
 });
 
 app.get(
-  '/github/callback',
+  '/auth/github/callback',
   passport.authenticate('github', {
     failureRedirect: '/api-docs',
     session: false

@@ -71,6 +71,8 @@ DELETE http://localhost:3001/tasks/{id}
 //==============================================//
               # PRODUCTION SECTION
 //==============================================//
+### Get All users
+GET https://project2-api-rest.onrender.com/users
 
 ### Get All tasks by USER ID
 GET https://project2-api-rest.onrender.com/users/68884edb4a1f21a4eb545411/tasks

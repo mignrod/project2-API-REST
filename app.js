@@ -78,12 +78,20 @@ passport.deserializeUser((obj, done) => {
 
 app.use('/', require('./routes'));
 
-app.get('/', (req, res) => {
-  res.send(
-    req.session.user !== undefined
-      ? `Logged in as ${req.session.user.displayName}`
-      : 'Logged Out'
-  );
+app.get('/login', (req, res) => {
+  const user = req.session.user;
+  const name = user?.profile?.displayName || user?.profile?.username || 'Guest';
+  res.send(`Logged in as ${name}`);
+});
+
+app.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).send('Error');
+    }
+    res.clearCookie('connect.sid');
+    res.redirect('/');
+  });
 });
 
 connectDB();

@@ -1,9 +1,9 @@
-const isAuthenticate = (req, res, next) => {
-  if (req.session.user === undefined) {
-    return res.status(400).json('You do not have access.');
+function isAuthenticate(req, res, next) {
+  if (req.session.user) {
+    return next();
   }
-  next();
-};
+  res.status(401).send('Unauthorized');
+}
 
 module.exports = {
   isAuthenticate

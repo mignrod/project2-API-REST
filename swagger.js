@@ -1,27 +1,30 @@
 const swaggerAutogen = require('swagger-autogen')();
 
+const isProduction = process.env.NODE_ENV === 'production';
+const host = isProduction ? 'project2-api-rest.onrender.com' : 'localhost:3001';
+const schemes = isProduction ? ['https'] : ['http'];
+
 const doc = {
   info: {
     title: 'Tasks Manager API',
     description: 'Tasks Manager API by Mignrod'
   },
-  host: 'project2-api-rest.onrender.com',
-  schemes: ['https'],
+  host,
+  schemes,
   securityDefinitions: {
-    GitHubOAuth: {
+    githubAuth: {
       type: 'oauth2',
+      flow: 'accessCode',
       authorizationUrl: 'https://github.com/login/oauth/authorize',
       tokenUrl: 'https://github.com/login/oauth/access_token',
-      flow: 'accessCode',
       scopes: {
-        'read:user': 'Read user info',
-        'user:email': 'Access to user email'
+        'read:user': 'Read user info'
       }
     }
   },
   security: [
     {
-      GitHubOAuth: ['read:user', 'user:email']
+      githubAuth: ['read:user']
     }
   ]
 };
@@ -29,18 +32,5 @@ const doc = {
 const outputfile = './swagger.json';
 const endpointsFiles = ['./routes/index.js'];
 
-const swaggerOptions = {
-  oauthOptions: {
-    clientId: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    scopes: ['read:user', 'user:email'],
-    usePkceWithAuthorizationCodeGrant: true,
-    useBasicAuthenticationWithAccessCodeGrant: false,
-    appName: 'Task Manager API',
-    redirectUrl:
-      'https://project2-api-rest.onrender.com/api-docs/oauth2-redirect.html'
-  }
-};
-
 // Generate swagger.json file
-swaggerAutogen(outputfile, endpointsFiles, doc, swaggerOptions);
+swaggerAutogen(outputfile, endpointsFiles, doc);

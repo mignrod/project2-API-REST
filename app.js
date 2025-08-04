@@ -6,31 +6,27 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const GitHubStrategy = require('passport-github2').Strategy;
 const cors = require('cors');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const fs = require('fs');
 
 const port = process.env.PORT || 3001;
 const app = express();
 
-const sessionMiddleware = session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URL,
-    collectionName: 'sessions',
-    ttl: 14 * 24 * 60 * 60
-  }),
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 * 14
-  }
-});
+if (!fs.existsSync('./swagger.json')) {
+  console.warn('⚠️  swagger.json not found');
+}
 
 app
   .use(bodyParser.json())
-  .use(sessionMiddleware)
+  .use(
+    session({
+      store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URL
+      }),
+      secret: 'secret',
+      resave: false,
+      saveUninitialized: true
+    })
+  )
   .use(passport.initialize())
   .use(passport.session())
   .use((req, res, next) => {
@@ -48,36 +44,13 @@ app
   .use(
     cors({
       methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
-      origin: '*',
-      credentials: true
+      origin: [
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'https://project2-api-rest.onrender.com'
+      ]
     })
   );
-
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument, {
-    swaggerOptions: {
-      initOAuth: {
-        appName: 'Task Manager API'
-      },
-      oauth: {
-        appName: 'Task Manager API',
-        scopes: 'read:user user:email',
-        useBasicAuthenticationWithAccessCodeGrant: false,
-        usePkceWithAuthorizationCodeGrant: true,
-        additionalQueryStringParams: {
-          response_type: 'code'
-        },
-        oauth2RedirectUrl:
-          'https://project2-api-rest.onrender.com/api-docs/oauth2-redirect.html'
-      },
-      persistAuthorization: true
-    }
-  })
-);
-
-app.use('/', require('./routes'));
 
 passport.use(
   new GitHubStrategy(
@@ -87,9 +60,11 @@ passport.use(
       callbackURL: process.env.CALLBACK_URL
     },
     (accessToken, refreshToken, profile, done) => {
-      //User.findOrCreate({ githubId: profile.id }, function (err, user) {
-      return done(null, profile);
-      //})
+      const userData = {
+        profile,
+        accessToken
+      };
+      return done(null, userData);
     }
   )
 );
@@ -97,9 +72,11 @@ passport.use(
 passport.serializeUser((user, done) => {
   done(null, user);
 });
-passport.deserializeUser((user, done) => {
-  done(null, user);
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
 });
+
+app.use('/', require('./routes'));
 
 app.get('/', (req, res) => {
   res.send(
@@ -108,21 +85,6 @@ app.get('/', (req, res) => {
       : 'Logged Out'
   );
 });
-
-app.get(
-  '/auth/github/callback',
-  passport.authenticate('github', {
-    failureRedirect: '/api-docs?authError=true',
-    session: false
-  }),
-  (req, res) => {
-    req.session.user = req.user;
-    res.redirect(
-      '/api-docs?authSuccess=true&user=' +
-        encodeURIComponent(req.user.displayName)
-    );
-  }
-);
 
 connectDB();
 

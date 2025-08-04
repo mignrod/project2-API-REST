@@ -10,15 +10,18 @@ router.use('/', require('./swagger'));
 
 router.use('/users', require('./users'));
 
-router.get('/login', passport.authenticate('github'), (req, res) => {});
+router.get(
+  '/auth/github',
+  passport.authenticate('github', { scope: ['user:email'] })
+);
 
-router.get('/logout', (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect('/');
-  });
-});
+router.get(
+  '/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/' }),
+  (req, res) => {
+    req.session.user = req.user;
+    res.redirect('/api-docs');
+  }
+);
 
 module.exports = router;
